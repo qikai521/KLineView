@@ -28,7 +28,7 @@ typedef enum : NSUInteger {
                     WithLastTime:(double)timeInterval
                     WithTIMETYPE:(TIMETYPE )timeType{
     NSMutableArray *dataArray = [NSMutableArray array];
-    for (int i = 0; i < kSendDataCount; i++) {
+    for (int i = kSendDataCount; i > 0; i--) {
         if (self.lastOpen == 0 && self.lastClose == 0) {
             self.lastOpen = 0.53223;
             self.lastClose = 0.53223*1.02;
@@ -43,10 +43,10 @@ typedef enum : NSUInteger {
         double closePrce = [self backPriceWithHighPrice:highPrice WithLowPrice:lowPrice];
         NSDictionary *dic = @{@"type":@"type1",
                               @"timeInterval":[NSNumber numberWithInt:(int)timeInterval],
-                              @"open":[NSNumber numberWithDouble:openPrice],
-                              @"close":[NSNumber numberWithDouble:closePrce],
-                              @"high":[NSNumber numberWithDouble:highPrice],
-                              @"low":[NSNumber numberWithDouble:lowPrice]};
+                              @"open":[self getFiveDigteWithDoublePoint:openPrice],
+                              @"close":[self getFiveDigteWithDoublePoint:closePrce],
+                              @"high":[self getFiveDigteWithDoublePoint:highPrice],
+                              @"low":[self getFiveDigteWithDoublePoint:lowPrice]};
         [dataArray addObject:dic];
         self.lastClose = closePrce;
     }
@@ -81,6 +81,17 @@ typedef enum : NSUInteger {
     double returnDouble = backInt * pow(0.1, 5);
     return returnDouble;
     
+}
+
+-(NSString *)getFiveDigteWithDoublePoint:(double )doubleFigure{
+    NSString *doubeString = [NSString stringWithFormat:@"%f",doubleFigure];
+    NSRange range = [doubeString rangeOfString:@"."];
+    if (range.location != NSNotFound) {
+        NSString *returnString = [doubeString substringToIndex:range.location + 6];
+        return returnString;
+    }else{
+        return @"1.00000";
+    }
 }
 
 
