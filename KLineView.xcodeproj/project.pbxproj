@@ -29,6 +29,9 @@
 		B98493091D65BC4800C3736E /* BaseLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = B98493081D65BC4800C3736E /* BaseLineView.m */; };
 		B984930F1D65BF9C00C3736E /* ZhuLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = B984930E1D65BF9C00C3736E /* ZhuLineView.m */; };
 		B98493121D65BFB900C3736E /* KLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = B98493111D65BFB900C3736E /* KLineView.m */; };
+		B98493891D67118A00C3736E /* UIColor+KLineColor.m in Sources */ = {isa = PBXBuildFile; fileRef = B98493881D67118A00C3736E /* UIColor+KLineColor.m */; };
+		B9F823E61D6A974100A1B100 /* OtherLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9F823E51D6A974100A1B100 /* OtherLineView.m */; };
+		B9F823E91D6A989400A1B100 /* ScrollOtherLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9F823E81D6A989400A1B100 /* ScrollOtherLineView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +94,12 @@
 		B984930E1D65BF9C00C3736E /* ZhuLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhuLineView.m; sourceTree = "<group>"; };
 		B98493101D65BFB900C3736E /* KLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineView.h; sourceTree = "<group>"; };
 		B98493111D65BFB900C3736E /* KLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineView.m; sourceTree = "<group>"; };
+		B98493871D67118A00C3736E /* UIColor+KLineColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+KLineColor.h"; sourceTree = "<group>"; };
+		B98493881D67118A00C3736E /* UIColor+KLineColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+KLineColor.m"; sourceTree = "<group>"; };
+		B9F823E41D6A974100A1B100 /* OtherLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OtherLineView.h; sourceTree = "<group>"; };
+		B9F823E51D6A974100A1B100 /* OtherLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OtherLineView.m; sourceTree = "<group>"; };
+		B9F823E71D6A989400A1B100 /* ScrollOtherLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollOtherLineView.h; sourceTree = "<group>"; };
+		B9F823E81D6A989400A1B100 /* ScrollOtherLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollOtherLineView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,10 +234,24 @@
 				B98493081D65BC4800C3736E /* BaseLineView.m */,
 				B984930D1D65BF9C00C3736E /* ZhuLineView.h */,
 				B984930E1D65BF9C00C3736E /* ZhuLineView.m */,
+				B9F823E41D6A974100A1B100 /* OtherLineView.h */,
+				B9F823E51D6A974100A1B100 /* OtherLineView.m */,
+				B9F823E71D6A989400A1B100 /* ScrollOtherLineView.h */,
+				B9F823E81D6A989400A1B100 /* ScrollOtherLineView.m */,
 				B98493101D65BFB900C3736E /* KLineView.h */,
 				B98493111D65BFB900C3736E /* KLineView.m */,
+				B98493861D67114B00C3736E /* UIColor+ */,
 			);
 			name = KLine;
+			sourceTree = "<group>";
+		};
+		B98493861D67114B00C3736E /* UIColor+ */ = {
+			isa = PBXGroup;
+			children = (
+				B98493871D67118A00C3736E /* UIColor+KLineColor.h */,
+				B98493881D67118A00C3736E /* UIColor+KLineColor.m */,
+			);
+			name = "UIColor+";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -371,6 +394,9 @@
 				B90BDBD81D49ED55005B6CCF /* QGData.m in Sources */,
 				B90BDB911D49EA2C005B6CCF /* AppDelegate.m in Sources */,
 				B90BDBCF1D49EA8A005B6CCF /* FMDatabase.m in Sources */,
+				B98493891D67118A00C3736E /* UIColor+KLineColor.m in Sources */,
+				B9F823E91D6A989400A1B100 /* ScrollOtherLineView.m in Sources */,
+				B9F823E61D6A974100A1B100 /* OtherLineView.m in Sources */,
 				B98493091D65BC4800C3736E /* BaseLineView.m in Sources */,
 				B90BDBD11D49EA8A005B6CCF /* FMDatabasePool.m in Sources */,
 				B90BDBD31D49EA8A005B6CCF /* FMResultSet.m in Sources */,
@@ -521,7 +547,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = KLineView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = creatrader.KLineView;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BinaryOption.cn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -532,7 +558,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = KLineView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = creatrader.KLineView;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BinaryOption.cn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
