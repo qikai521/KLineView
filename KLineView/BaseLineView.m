@@ -10,13 +10,14 @@
 #define  kShowCountMax 126//显示的最多的条数
 #define  kShowCountMini 8 //显示的最小的条数,虚线的条数
 #define  kCoodXSpace ((self.frame.size.width - self.axisMarginLeft - self.axisMarginRight) + 10)/7.0
+#define kScrollContentOffSet self.firstItemLoacationX
 
 @implementation BaseLineView
 
 {
     float _chaValue;
-    int _numofLine;  //纵坐标的数量
     int _numOfItemOneX;//每一个格子可以有多少条数据
+    double _bestRightItemOffSetX;
 }
 
 //在未设置的时候初始化颜色以及绘制区域
@@ -35,7 +36,9 @@
     self.maxCountOfLine = 12;
     //设置显示的条数
     self.middleNumber = 4;
-    self.showCount = 8;
+    self.showCount = 36;
+    //取消弹性效果
+    self.bounces = NO;
     
 }
 
@@ -44,6 +47,10 @@
 {
     //计算纵坐标
     _showDataArr = showDataArr;
+    NSInteger bestRightItemNum = self.allDataArr.count - (int)((self.contentOffset.x + self.frame.size.width -self.axisMarginLeft - self.axisMarginRight + 10) /self.separaXWidth);
+    if (bestRightItemNum < 0) {
+        bestRightItemNum = 0;
+    }
     //需要计算当前显示的数组的最大值和最小值
     for (int i = 0;  i < showDataArr.count; i++) {
         //首先计算最大值(最大值只可能存在于sellData里面)
@@ -83,6 +90,7 @@
         _chaValue = [_maxValueString floatValue ] - [_minValueString floatValue];
         //如果有改变的话 重新计算Y坐标(6~ 10)之间
     }
+    [self setNeedsDisplay];
 }
 //如果是isMax 那么就小数点后倒数第二位+1 如果不是就直接将最后一位置0
 -(NSString *)backValueStringWithNSString:(NSString *)valueString
@@ -125,7 +133,7 @@
  */
 -(void)drawWhiteKuang{
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextAddRect(context, CGRectMake(self.axisMarginLeft, self.axisMarginTop, self.frame.size.width - self.axisMarginLeft - self.axisMarginRight, self.frame.size.height - self.axisMarginTop - self.axisMarginBottom));
+    CGContextAddRect(context, CGRectMake(self.axisMarginLeft + kScrollContentOffSet, self.axisMarginTop, self.frame.size.width - self.axisMarginLeft - self.axisMarginRight, self.frame.size.height - self.axisMarginTop - self.axisMarginBottom));
     CGContextSetStrokeColorWithColor(context, self.bigRectColor.CGColor);
     CGContextStrokePath(context);
 }
@@ -167,21 +175,21 @@
         }
     }
     CGContextRef context = UIGraphicsGetCurrentContext();
+    CGFloat separaLineLenght = (self.frame.size.height - self.axisMarginTop - self.axisMarginBottom) / _numofLine;
     for (int i = 0 ; i < _numofLine; i++) {
-        CGFloat separaLineLenght = (self.frame.size.height - self.axisMarginTop - self.axisMarginBottom) / _numofLine;
         CGContextSetLineWidth(context, 1);
         CGFloat length[2] = {2,2};
         CGContextSetLineDash(context, 0, length, 1);
         CGContextSetStrokeColorWithColor(context, self.separaLineColor.CGColor);
-        CGContextMoveToPoint(context, self.axisMarginLeft , self.axisMarginTop + separaLineLenght * i);
-        CGContextAddLineToPoint(context, self.frame.size.width - self.axisMarginLeft - self.axisMarginRight, self.axisMarginTop + separaLineLenght * i);
+        CGContextMoveToPoint(context, self.axisMarginLeft + kScrollContentOffSet, self.axisMarginTop + separaLineLenght * i);
+        CGContextAddLineToPoint(context, self.frame.size.width - self.axisMarginLeft - self.axisMarginRight +kScrollContentOffSet , self.axisMarginTop + separaLineLenght * i);
         CGContextStrokePath(context);
         CGContextSetLineDash(context, 0, nil, 0);
         
         NSString *drawText = textArr[_numofLine - i - 1];
-        [drawText drawInRect:CGRectMake(self.frame.size.width - self.axisMarginRight + 2, self.axisMarginTop + separaLineLenght * i - _fontNum/2.0, drawText.length * _fontNum, _fontNum) withAttributes:@{ NSFontAttributeName:[UIFont systemFontOfSize:_fontNum],NSForegroundColorAttributeName:self.separaTextColor}];
-        
+        [drawText drawInRect:CGRectMake(self.frame.size.width - self.axisMarginRight + 2 +kScrollContentOffSet, self.axisMarginTop + separaLineLenght * i - _fontNum/2.0, drawText.length * _fontNum, _fontNum) withAttributes:@{ NSFontAttributeName:[UIFont systemFontOfSize:_fontNum],NSForegroundColorAttributeName:self.separaTextColor}];
     }
+    
 }
 //获取纵坐标的刻度
 -(float )getCoordYValue{
@@ -218,15 +226,17 @@
  */
 -(void)calculateXCoording{
     //首先计算出最右侧的线所在的位置
-    double leftCoodX = self.frame.size.width - self.axisMarginRight +10 + (int)self.contentOffset.x%(int)kCoodXSpace;
+    double rightX = self.frame.size.width - self.axisMarginRight +10 + self.firstItemOffSetX + kCoodXSpace;
     CGContextRef context = UIGraphicsGetCurrentContext();
 #warning 使用addLines的方式 是否会使性能更加优化
     CGFloat length[2] = {2,2};
     CGContextSetLineDash(context, 0, length, 1);
     NSArray *timeTexts = [self getCoodXTextArray];
+    BOOL fisetCome = YES;
     for (int i = 0; i< 8 ; i ++) {
-        double coodX = leftCoodX - kCoodXSpace * i;
-        if (coodX >= self.axisMarginLeft && coodX <= self.frame.size.width - self.axisMarginRight) {
+        double coodX = rightX - kCoodXSpace * i ;
+        //设置firstItem 来判断在绘制K线的时候的起始位置
+        if (coodX >= self.axisMarginLeft +kScrollContentOffSet && coodX <= self.frame.size.width - self.axisMarginRight +kScrollContentOffSet) {
             CGContextMoveToPoint(context, coodX, self.axisMarginTop);
             CGContextAddLineToPoint(context, coodX, self.frame.size.height - self.axisMarginBottom);
             if ((i-1)%2 == 0) {
@@ -274,6 +284,7 @@
         }
         _numOfItemOneX = (int)_showCount/8;
         //修改可showCount那么需要修改showArray
+        self.separaXWidth = kCoodXSpace/_numOfItemOneX;
         [self resetShowData];
     }
 }
@@ -282,19 +293,59 @@
  */
 -(void)resetShowData{
     int nearShowCount = self.middleNumber - (int)self.showCount/2.0;
-    id objc = _showDataArr[(int)(self.showCount/2.0)];
-    self.middleNumber = [_allDataArr indexOfObject:objc];
+    if (nearShowCount < 0) {
+        nearShowCount = 0;
+    }else if (nearShowCount > self.allDataArr.count - self.showCount){
+        nearShowCount = self.allDataArr.count - self.showCount;
+    }
     self.showDataArr = [_allDataArr subarrayWithRange:NSMakeRange(nearShowCount, self.showCount)];
-    
 }
 #pragma mark --设置allData 的时候需要判断
 -(void)setAllDataArr:(NSArray *)allDataArr{
     if (_allDataArr != allDataArr) {
         _allDataArr = allDataArr;
-#warning  --需要根据最大的显示数量和每个k线所占的宽度计算scrollView的contenSize
+        //为了调用setSeparaWidth方法（在setSeparaWidth里面设置了contentSize）
+        self.separaXWidth = self.separaXWidth;
+        [self setContentOffset:CGPointMake(self.lastSaveLocationX, 0)];
+    }
+}
+#pragma  mark -- 设置firstItemLoacationX--第一条虚线所在的位置
+-(void)setFirstItemLoacationX:(double)firstItemLoacationX{
+    if (_firstItemLoacationX != firstItemLoacationX) {
+        if (self.separaXWidth == 0) {
+            return;
+        }
+        _firstItemLoacationX = firstItemLoacationX;
+        if (_bestRightItemNum < 0) {
+            self.bestRightItemNum = 0;
+        }
+        NSInteger fistItemLocationIntX = (firstItemLoacationX) * pow(10, 5);
+        NSInteger separaWidthInt = kCoodXSpace * pow(10, 5);
+        NSInteger itemSeparaWidthInt = self.separaXWidth * pow(10, 5);
+        NSInteger addInt = 0;
+        NSInteger itemAddInt = 0;
+        if (separaWidthInt != 0) {
+            addInt = (fistItemLocationIntX)%(separaWidthInt);
+            itemAddInt = (fistItemLocationIntX)%itemSeparaWidthInt;
+        }
+        double addDouble = addInt * pow(0.1, 5);
+        double itemAddDouble = itemAddInt * pow(0.1, 5);
+        /**
+         *  分别设置分割线的偏移位置和item的分割位置
+         */
+        _firstItemOffSetX = _firstItemLoacationX - addDouble - kCoodXSpace;
+        self.firstItemX =  kScrollContentOffSet  + kCoodXSpace *7 - itemAddDouble + _bestRightItemOffSetX -kCoodXSpace;
     }
 }
 
+-(void)setBestRightItemNum:(NSInteger)bestRightItemNum{
+    if (bestRightItemNum != _bestRightItemNum) {
+        _bestRightItemNum = bestRightItemNum;
+        if (_bestRightItemNum < _numOfItemOneX) {
+            _bestRightItemOffSetX = _bestRightItemNum * self.separaXWidth;
+        }
+    }
+}
 
 
 

@@ -7,7 +7,7 @@
 //
 
 #import "SendData.h"
-#define kSendDataCount 100
+#define kSendDataCount 200
 /**
  *  模拟获得K线的数据，其中包括type，time，
  */
@@ -37,18 +37,22 @@ typedef enum : NSUInteger {
         timeInterval = timeInterval - i * 60;
         //开盘价格,首先获取到开盘价格
         double openPrice = [self backPriceWithPrice:self.lastClose];
-        double lowPrice = [self backPriceWithPrice:openPrice];
+        double lowPrice = [self backPriceWithHighPrice:openPrice WithLowPrice:openPrice * 0.9];
         
-        double highPrice = [self backPriceWithHighPrice:openPrice * 1.1 WithLowPrice:lowPrice];
+        double highPrice = [self backPriceWithHighPrice:openPrice * 1.1 WithLowPrice:openPrice];
         double closePrce = [self backPriceWithHighPrice:highPrice WithLowPrice:lowPrice];
         NSDictionary *dic = @{@"type":@"type1",
                               @"timeInterval":[NSNumber numberWithInt:(int)timeInterval],
                               @"open":[self getFiveDigteWithDoublePoint:openPrice],
                               @"close":[self getFiveDigteWithDoublePoint:closePrce],
                               @"high":[self getFiveDigteWithDoublePoint:highPrice],
-                              @"low":[self getFiveDigteWithDoublePoint:lowPrice]};
+                              @"low":[self getFiveDigteWithDoublePoint:lowPrice],
+                              @"numOfItem":[NSString stringWithFormat:@"%d",i]};
         [dataArray addObject:dic];
         self.lastClose = closePrce;
+        if (self.lastClose < 0.05) {
+            self.lastClose = 0.05;
+        }
     }
     return dataArray;
 }
@@ -74,11 +78,18 @@ typedef enum : NSUInteger {
  */
 -(double )backPriceWithHighPrice:(double )highPrice
                     WithLowPrice:(double )lowPrice{
+    if (highPrice < 0.05) {
+        highPrice = 0.05;
+        lowPrice = 0.03;
+    }
     int lowPriceInt = (int)(lowPrice * pow(10, 5));
     int highPriceInt = (int)(highPrice * pow(10, 5));
     int rangePriceInt = highPriceInt - lowPriceInt;
     int backInt = lowPriceInt + arc4random()%rangePriceInt;
     double returnDouble = backInt * pow(0.1, 5);
+//    do {
+//        [self backPriceWithHighPrice:highPrice WithLowPrice:lowPrice];
+//    } while (!(returnDouble >lowPrice && returnDouble <highPriceInt));
     return returnDouble;
     
 }

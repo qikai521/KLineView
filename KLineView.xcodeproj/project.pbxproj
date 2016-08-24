@@ -32,6 +32,7 @@
 		B98493891D67118A00C3736E /* UIColor+KLineColor.m in Sources */ = {isa = PBXBuildFile; fileRef = B98493881D67118A00C3736E /* UIColor+KLineColor.m */; };
 		B9F823E61D6A974100A1B100 /* OtherLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9F823E51D6A974100A1B100 /* OtherLineView.m */; };
 		B9F823E91D6A989400A1B100 /* ScrollOtherLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9F823E81D6A989400A1B100 /* ScrollOtherLineView.m */; };
+		B9F823EC1D6D494800A1B100 /* BaseLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = B98493081D65BC4800C3736E /* BaseLineView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -411,6 +412,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B90BDBAA1D49EA2C005B6CCF /* KLineViewTests.m in Sources */,
+				B9F823EC1D6D494800A1B100 /* BaseLineView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
