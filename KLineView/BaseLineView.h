@@ -47,7 +47,7 @@
 @property (nonatomic ,assign)NSInteger bestRightItemNum; //最右侧的Item在allDataArr里面的num
 @property (nonatomic ,assign)double lastSaveLocationX;
 @property (nonatomic ,assign)int numofLine;
-
+@property (nonatomic ,assign)NSInteger numOfItemOneALLData;
 
 /**
  *  初始化设置

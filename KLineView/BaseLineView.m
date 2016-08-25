@@ -27,6 +27,7 @@
 //    self.coordingYColor = [UIColor blackColor];
     self.bigRectColor = [UIColor whiteColor];
     self.separaTextColor = [UIColor whiteColor];
+    self.numOfItemOneALLData = 200;
     self.axisMarginRight = 5*8+10;
     self.fontNum = 10;
     self.axisMarginTop = 1;
@@ -306,7 +307,7 @@
         _allDataArr = allDataArr;
         //为了调用setSeparaWidth方法（在setSeparaWidth里面设置了contentSize）
         self.separaXWidth = self.separaXWidth;
-        [self setContentOffset:CGPointMake(self.lastSaveLocationX, 0)];
+        [self setContentOffset:CGPointMake(self.lastSaveLocationX, 0) animated:NO];
     }
 }
 #pragma  mark -- 设置firstItemLoacationX--第一条虚线所在的位置
@@ -335,14 +336,17 @@
          */
         _firstItemOffSetX = _firstItemLoacationX - addDouble - kCoodXSpace;
         self.firstItemX =  kScrollContentOffSet  + kCoodXSpace *7 - itemAddDouble + _bestRightItemOffSetX -kCoodXSpace;
+        NSLog(@"firstItemX  == %f     bestRightRightOFFSetX = %f",self.firstItemX - kScrollContentOffSet-312,_bestRightItemOffSetX);
     }
 }
 
 -(void)setBestRightItemNum:(NSInteger)bestRightItemNum{
     if (bestRightItemNum != _bestRightItemNum) {
         _bestRightItemNum = bestRightItemNum;
-        if (_bestRightItemNum < _numOfItemOneX) {
+        if (_bestRightItemNum <= _numOfItemOneX) {
             _bestRightItemOffSetX = _bestRightItemNum * self.separaXWidth;
+        }else{
+            _bestRightItemOffSetX = self.separaXWidth * _numOfItemOneX;
         }
     }
 }

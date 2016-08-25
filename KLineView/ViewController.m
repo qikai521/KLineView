@@ -37,8 +37,6 @@
                 NSArray *addData= [sendData getKLineDataWithType:@"type1" WithLastTime:[[NSDate date] timeIntervalSince1970] - 60 *100 *dateNum WithTIMETYPE:0];
                 [allDatas addObjectsFromArray:addData];
                 _klineView.allDataArr = allDatas;
-                //数据加载完成之后需要需要调整scroll的contentOffSet
-                [_klineView setContentOffset:CGPointMake(_klineView.lastSaveLocationX + 300, 0)];
             });
         }
     }];

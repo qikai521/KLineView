@@ -34,12 +34,9 @@
         //可以在这里改变FirstItem的Location
     }else{
         //加载数据
-        
-        self.lastSaveLocationX = 100 *self.separaXWidth;
+        self.lastSaveLocationX = self.numOfItemOneALLData * self.separaXWidth + self.axisMarginRight;
         if (self.contentOffset.x == 0) {
             self.block(YES);
-        }else{
-            NSLog(@"不相等");
         }
     }
 }

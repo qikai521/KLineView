@@ -33,7 +33,7 @@
     //绘制K线图
     [self drawCandlestickCharts];
     //重新绘制纵坐标
-//    [self reDrawCoodY];
+    [self reDrawCoodY];
 }
 /**
  *  绘制K线图，需要从右侧往左边绘制,需要根据先绘制根据showdatas的数量来绘制，首先需要绘制第一条数据，然后第一条线的位置跟初始位置和showdatas的数量还有偏移位置有关系
